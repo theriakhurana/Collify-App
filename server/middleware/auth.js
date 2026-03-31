@@ -1,4 +1,4 @@
-import { jwt } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 
 const checkForAuth = (req, res, next) => {
   const token = req.cookies.token;
@@ -6,23 +6,20 @@ const checkForAuth = (req, res, next) => {
     return res.status(401).json({ msg: "No Token, authorization denied" });
   }
 
-  try{
+  try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
-    next(); 
+    next();
   } catch (err) {
-    res.status(401).json({msg: "Token not valid"});
+    res.status(401).json({ msg: "Token not valid" });
   }
 };
 
-const teacherOnly = (req, res, next)=>{
-  if (req.user.role !== 'teacher') {
-    return res.status(403).json({msg : "Access denied: Teacher Only Section"});
+const teacherOnly = (req, res, next) => {
+  if (req.user.role !== "teacher") {
+    return res.status(403).json({ msg: "Access denied: Teacher Only Section" });
   }
   next();
-}
-
-module.exports = {
-  checkForAuth,
-  teacherOnly
 };
+
+export { checkForAuth, teacherOnly };

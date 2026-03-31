@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import authRoutes from './routes/auth.js';
 import classroomRoutes from './routes/classroom.js';
 import cookieParser from "cookie-parser";
+import cors from "cors"
 
 dotenv.config({ path: "../.env" });
 connectDB();
@@ -11,7 +12,11 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser);
+app.use(cookieParser());
+app.use(cors({
+  origin: "http://localhost:3000", // frontend url
+  credentials: true
+}));
 
 app.get("/", (req, res) => {
   res.send("API run ho rhi hai :))");
